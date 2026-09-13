@@ -1,0 +1,50 @@
+# 推送 v* 标签（或在 Actions 页面手动触发）时，自动把包发布到 npm。
+# 使用 npm Trusted Publishing (OIDC)：全程不需要任何 NPM_TOKEN 密钥。
+#
+# 前置条件（在 npm 网页上配置一次）：
+#   npmjs.com → 包 @dshcli/dsh-cli → Settings → Trusted Publisher
+#   选择 GitHub Actions，填写：组织/用户名、仓库名、workflow 文件名 publish.yml
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # Trusted Publishing 必需：允许 GitHub 签发 OIDC 令牌给 npm
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 准备 Node 环境
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: 打印版本
+        run: node -v && npm -v
+
+      - name: 版本一致性检查（tag 必须与 package.json 一致）
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          pkg=$(node -p "require('./package.json').version")
+          tag="${GITHUB_REF_NAME#v}"
+          echo "package.json=$pkg  tag=$tag"
+          if [ "$pkg" != "$tag" ]; then
+            echo "::error::tag 与 package.json 的版本不一致，已中止发布"
+            exit 1
+          fi
+
+      - name: 运行测试
+        run: npm test
+
+      - name: 发布到 npm（OIDC 可信发布）
+        run: npm publish --access public

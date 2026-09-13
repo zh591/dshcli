@@ -1,0 +1,53 @@
+{
+  "name": "@dshcli/dsh-cli",
+  "version": "0.2.0",
+  "description": "Pure-CLI terminal client for DeepSeek Harness (dsh): multi-turn agent sessions, an isolated harness home, a folder-dialog working-directory picker, model switching, one-command launch of the browser frontend, and vision-based frontend verification.",
+  "keywords": [
+    "dsh",
+    "deepseek",
+    "deepseek-harness",
+    "harness",
+    "cli",
+    "tui",
+    "terminal",
+    "agent",
+    "ai-agent",
+    "coding-agent"
+  ],
+  "type": "module",
+  "bin": {
+    "dshcli": "bin/dshcli.mjs"
+  },
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "README.zh.md"
+  ],
+  "engines": {
+    "node": ">=18.17"
+  },
+  "scripts": {
+    "start": "node bin/dshcli.mjs",
+    "test": "node tests/unit.mjs",
+    "test:interactive": "node tests/interactive.mjs",
+    "doctor": "node bin/dshcli.mjs doctor"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "dshcli",
+  "license": "MIT",
+  "dependencies": {},
+  "peerDependencies": {
+    "@deepseek-ai/dsh": ">=0.1.5-rc.1"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh": {
+      "optional": true
+    }
+  }
+}

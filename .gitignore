@@ -1,0 +1,17 @@
+# 依赖与打包产物
+node_modules/
+*.tgz
+npm-debug.log*
+
+# 本地运行/工具缓存
+.dshcli/
+*.log
+
+# 参考用的 DeepSeek Harness 源码检出（约 99MB，且自带 .git，不要进本仓库）
+deepseek-harness/
+
+# 编辑器 / 系统文件
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

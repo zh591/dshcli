@@ -1,6 +1,6 @@
 {
   "name": "@dshcli/dsh-cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Pure-CLI terminal client for DeepSeek Harness (dsh): multi-turn agent sessions, an isolated harness home, a folder-dialog working-directory picker, model switching, one-command launch of the browser frontend, and vision-based frontend verification.",
   "keywords": [
     "dsh",

@@ -1,9 +1,12 @@
 # 推送 v* 标签（或在 Actions 页面手动触发）时，自动把包发布到 npm。
-# 使用 npm Trusted Publishing (OIDC)：全程不需要任何 NPM_TOKEN 密钥。
 #
-# 前置条件（在 npm 网页上配置一次）：
-#   npmjs.com → 包 @dshcli/dsh-cli → Settings → Trusted Publisher
-#   选择 GitHub Actions，填写：组织/用户名、仓库名、workflow 文件名 publish.yml
+# 两种发布方式，workflow 会自动判断用哪一种：
+#   1) 仓库里配置了 NPM_TOKEN 密钥  → 用令牌发布（当前方式，简单直接）
+#   2) 没有 NPM_TOKEN 密钥          → 走 npm Trusted Publishing (OIDC)，不需要任何令牌
+#
+# 方式 2 的前置条件（npm 侧配置一次，且账号必须已开启 2FA）：
+#   npm trust github @dshcli/dsh-cli --file publish.yml --repo zh591/dshcli --allow-publish
+#   配置好之后，删掉仓库里的 NPM_TOKEN 密钥即可自动切换，无需改动本文件。
 name: Publish to npm
 
 on:
@@ -46,5 +49,14 @@ jobs:
       - name: 运行测试
         run: npm test
 
-      - name: 发布到 npm（OIDC 可信发布）
-        run: npm publish --access public
+      - name: 发布到 npm
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -n "${NPM_TOKEN}" ]; then
+            echo "→ 使用仓库密钥 NPM_TOKEN 发布"
+            export NODE_AUTH_TOKEN="${NPM_TOKEN}"
+          else
+            echo "→ 未配置 NPM_TOKEN，改用 OIDC 可信发布"
+          fi
+          npm publish --access public

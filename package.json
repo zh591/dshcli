@@ -36,6 +36,14 @@
     "test:interactive": "node tests/interactive.mjs",
     "doctor": "node bin/dshcli.mjs doctor"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zh591/dshcli.git"
+  },
+  "homepage": "https://github.com/zh591/dshcli#readme",
+  "bugs": {
+    "url": "https://github.com/zh591/dshcli/issues"
+  },
   "publishConfig": {
     "access": "public"
   },
